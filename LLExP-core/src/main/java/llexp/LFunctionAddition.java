@@ -25,11 +25,6 @@ class LFunctionAddition<E> implements LFunction<E> {
     }
 
     @Override
-    public Class<?> getReturnType() {
-        return Number.class;
-    }
-
-    @Override
     public List<Class<?>> getArgumentsType() {
         return Collections.singletonList(Number.class);
     }

@@ -18,11 +18,6 @@ public class LFunctionSubtraction<E> implements LFunction<E> {
         }
     }
 
-    @Override
-    public Class<?> getReturnType() {
-        return Number.class;
-    }
-
     private static List<Class<?>> ARGUMENTS_TYPES = new ArrayList<>();
     static {
         ARGUMENTS_TYPES.add(Number.class);

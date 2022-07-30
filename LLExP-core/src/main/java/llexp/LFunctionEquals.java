@@ -7,12 +7,17 @@ import java.util.List;
 class LFunctionEquals<E> implements LFunction<E> {
     @Override
     public Object apply(E e, List<Object> list) {
-        return list.get(0).equals(list.get(1));
-    }
-
-    @Override
-    public Class<?> getReturnType() {
-        return Object.class;
+        Object arg1 = list.get(0);
+        Object arg2 = list.get(1);
+        if (arg1 instanceof Number && arg2 instanceof Number) {
+            if (arg1 instanceof Double || arg2 instanceof Double) {
+                return ((Number) arg1).doubleValue() == ((Number) arg2).doubleValue();
+            } else {
+                return ((Number) arg1).longValue() == ((Number) arg2).longValue();
+            }
+        } else {
+            return arg1.equals(arg2);
+        }
     }
 
     private static List<Class<?>> ARGUMENTS_TYPES = new ArrayList<>();

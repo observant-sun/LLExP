@@ -50,30 +50,56 @@ class EvaluatorFactoryImplTest {
     }
 
     private static class TestClass {
-        private int a;
+        private final int a;
+
+        private TestClass(int a) {
+            this.a = a;
+        }
 
         public int getA() {
             return a;
-        }
-
-        public void setA(int a) {
-            this.a = a;
         }
     }
 
     @Test
     void createEvaluator_methodInvocation() throws NoSuchMethodException {
-        String expr = "(if (= a 1) 1 2)";
-        TestClass t = new TestClass();
-        t.setA(1);
+        String expr = "(if (= a 1.0) 1 0)";
         Map<String, Method> nameMethodMap = new HashMap<>();
         nameMethodMap.put("a", TestClass.class.getMethod("getA", (Class<?>[]) null));
 
         EvaluatorFactory<TestClass> evaluatorFactory = new EvaluatorFactoryImpl<>(nameMethodMap);
         Evaluator<TestClass, Long> evaluator = evaluatorFactory.createEvaluator(expr, Long.class);
-        Long eval = evaluator.eval(t);
 
-        assertEquals(2, eval);
+
+        TestClass t1 = new TestClass(1);
+        Long eval = evaluator.eval(t1);
+        assertEquals(1, eval);
+
+        TestClass t2 = new TestClass(2);
+        eval = evaluator.eval(t2);
+        assertEquals(0, eval);
+    }
+
+    @ParameterizedTest
+    @MethodSource("createEvaluatorDoubleArgumentsProvider")
+    void createEvaluator_simpleDouble(String expr, Object result) {
+        EvaluatorFactory<Object> evaluatorFactory = new EvaluatorFactoryImpl<>(Collections.emptyMap());
+        Evaluator<Object, Double> evaluator = evaluatorFactory.createEvaluator(expr, Double.class);
+        Double eval = evaluator.eval(new Object());
+        assertEquals((Double) result, eval, 1e-7);
+    }
+
+    private static Stream<Arguments> createEvaluatorDoubleArgumentsProvider() {
+        return Stream.of(
+                Arguments.arguments("(+ 1.0 2.0)", 3.0),
+                Arguments.arguments("(+ 12.1 32.1)", 12.1 + 32.1),
+                Arguments.arguments("(+ 32.0)", 32.0),
+                Arguments.arguments("(+ 10   100 10)", 120.0),
+                Arguments.arguments("(+   (+ 1 2)    (+ 1 2) (+ (+ 1) 2))", 9.0),
+                Arguments.arguments("(- 10 1)", 9.0),
+                Arguments.arguments("(- -10 (+ 1.0 (- 1. 3.)))", -9.0),
+                Arguments.arguments("(if (= .2 .2) 1 2.0)", 1.0)
+        );
     }
 
 

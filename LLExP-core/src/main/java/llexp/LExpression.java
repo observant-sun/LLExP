@@ -24,25 +24,11 @@ class LExpression<E> {
                     // TODO: 30.07.2022 Message
                     throw new IllegalArgumentException();
                 }
-//                Class<?> argClass = function.getArgumentsType().get(0);
-//                for (LExpression<E> lExpression : tail) {
-//                    if (!argClass.isAssignableFrom(lExpression.getReturnType())) {
-//                        // TODO: 30.07.2022 Message
-//                        throw new IllegalArgumentException();
-//                    }
-//                }
             } else {
                 if (function.getArgumentsType().size() != tail.size()) {
                     // TODO: 30.07.2022 Message
                     throw new IllegalArgumentException();
                 }
-//                for (int i = 0; i < tail.size(); i++) {
-//                    // correct order.
-//                    if (!tail.get(i).getReturnType().isAssignableFrom(function.getArgumentsType().get(i))) {
-//                        // TODO: 30.07.2022 Message
-//                        throw new IllegalArgumentException();
-//                    }
-//                }
             }
         }
         this.head = head;

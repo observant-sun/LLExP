@@ -8,7 +8,7 @@ import java.util.Map;
 
 class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
 
-    private Map<String, Method> nameMethodMap;
+    private final Map<String, Method> nameMethodMap;
 
     EvaluatorFactoryImpl(Map<String, Method> nameMethodMap) {
         this.nameMethodMap = nameMethodMap;
@@ -19,9 +19,6 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
         if (exp == null) {
             throw new NullPointerException("expression must be non-null");
         }
-        if (resultClass == null) {
-            throw new NullPointerException("result class must be non-null");
-        }
 
         exp = exp.trim();
         if (exp.isEmpty()) {
@@ -30,7 +27,7 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
 
         LExpression<E> lExpression = parseString(exp);
 
-        return new EvaluatorImpl<E, R>(lExpression);
+        return new EvaluatorImpl<>(lExpression, resultClass);
     }
 
     private LExpression<E> parseString(String str) {

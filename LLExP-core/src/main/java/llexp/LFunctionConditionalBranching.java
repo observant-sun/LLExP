@@ -15,11 +15,6 @@ class LFunctionConditionalBranching<E> implements LFunction<E> {
         }
     }
 
-    @Override
-    public Class<?> getReturnType() {
-        return Object.class;
-    }
-
     private static List<Class<?>> ARGUMENTS_TYPES = new ArrayList<>();
     static {
         ARGUMENTS_TYPES.add(Boolean.class);
