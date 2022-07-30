@@ -5,6 +5,15 @@ import java.util.*;
 public class LFunctionSubtraction<E> implements LFunction<E> {
     @Override
     public Object apply(E e, List<Object> list) {
+        if (list.size() == 1) {
+            Object arg = list.get(0);
+            if (arg instanceof Double) {
+                return - (Double) arg;
+            }
+            if (arg instanceof Long) {
+                return - (Long) arg;
+            }
+        }
         if (list.stream().anyMatch(o -> o.getClass().equals(Double.class))) {
             double arg1 = ((Number) list.get(0)).doubleValue();
             double arg2 = ((Number) list.get(1)).doubleValue();

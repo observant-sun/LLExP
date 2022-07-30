@@ -45,7 +45,10 @@ class EvaluatorFactoryImplTest {
                 Arguments.arguments("(+   (+ 1 2)    (+ 1 2) (+ (+ 1) 2))", 9L),
                 Arguments.arguments("(- 10 1)", 9L),
                 Arguments.arguments("(- -10 (+ 1 (- 1 3)))", -9L),
-                Arguments.arguments("(if (= 1 1) 1 2)", 1L)
+                Arguments.arguments("(if (= 1 1) 1 2)", 1L),
+                Arguments.arguments("(if (= (/ 5 4) 1) 1 0)", 1L),
+                Arguments.arguments("(if (= (/ 5.0 4) 1) 1 0)", 0L),
+                Arguments.arguments("(* 10 9)", 90L)
                 );
     }
 
@@ -98,7 +101,9 @@ class EvaluatorFactoryImplTest {
                 Arguments.arguments("(+   (+ 1 2)    (+ 1 2) (+ (+ 1) 2))", 9.0),
                 Arguments.arguments("(- 10 1)", 9.0),
                 Arguments.arguments("(- -10 (+ 1.0 (- 1. 3.)))", -9.0),
-                Arguments.arguments("(if (= .2 .2) 1 2.0)", 1.0)
+                Arguments.arguments("(if (= .2 .2) 1 2.0)", 1.0),
+                Arguments.arguments("(if (= (/ 5.0 4) 1) 1 0)", 0.0),
+                Arguments.arguments("(/ 10. 9)", 10.0 / 9)
         );
     }
 

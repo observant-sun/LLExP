@@ -70,6 +70,12 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
             case "-":
                 lFunction = new LFunctionSubtraction<>();
                 break;
+            case "*":
+                lFunction = new LFunctionMultiplication<>();
+                break;
+            case "/":
+                lFunction = new LFunctionDivision<>();
+                break;
             case "if":
                 lFunction = new LFunctionConditionalBranching<>();
                 break;
