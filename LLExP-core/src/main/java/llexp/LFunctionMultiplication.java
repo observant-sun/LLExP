@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class LFunctionMultiplication<E> implements LFunction<E> {
+class LFunctionMultiplication<E> implements LFunction<E> {
     @Override
     public Object apply(E e, List<Object> list) {
         if (list.stream().anyMatch(o -> o.getClass().equals(Double.class))) {

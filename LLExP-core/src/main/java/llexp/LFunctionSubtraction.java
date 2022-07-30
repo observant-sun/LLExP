@@ -2,7 +2,7 @@ package llexp;
 
 import java.util.*;
 
-public class LFunctionSubtraction<E> implements LFunction<E> {
+class LFunctionSubtraction<E> implements LFunction<E> {
     @Override
     public Object apply(E e, List<Object> list) {
         if (list.size() == 1) {
