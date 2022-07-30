@@ -1,8 +1,8 @@
 package llexp;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 class LFunctionEquals<E> implements LFunction<E> {
     @Override
@@ -20,19 +20,13 @@ class LFunctionEquals<E> implements LFunction<E> {
         }
     }
 
-    private static List<Class<?>> ARGUMENTS_TYPES = new ArrayList<>();
-    static {
-        ARGUMENTS_TYPES.add(Object.class);
-        ARGUMENTS_TYPES.add(Object.class);
-        ARGUMENTS_TYPES = Collections.unmodifiableList(ARGUMENTS_TYPES);
-    }
     @Override
-    public List<Class<?>> getArgumentsType() {
-        return ARGUMENTS_TYPES;
+    public Set<Integer> getPossibleArgumentsCounts() {
+        return Collections.singleton(2);
     }
 
     @Override
-    public boolean isMultipleArgument() {
+    public boolean isVarArgs() {
         return false;
     }
 }

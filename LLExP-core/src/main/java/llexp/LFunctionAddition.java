@@ -2,6 +2,7 @@ package llexp;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 class LFunctionAddition<E> implements LFunction<E> {
 
@@ -25,12 +26,12 @@ class LFunctionAddition<E> implements LFunction<E> {
     }
 
     @Override
-    public List<Class<?>> getArgumentsType() {
-        return Collections.singletonList(Number.class);
+    public Set<Integer> getPossibleArgumentsCounts() {
+        return Collections.singleton(1);
     }
 
     @Override
-    public boolean isMultipleArgument() {
+    public boolean isVarArgs() {
         return true;
     }
 }

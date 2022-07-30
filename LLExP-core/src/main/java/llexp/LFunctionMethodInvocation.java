@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 class LFunctionMethodInvocation<E> implements LFunction<E> {
 
@@ -23,12 +24,12 @@ class LFunctionMethodInvocation<E> implements LFunction<E> {
     }
 
     @Override
-    public List<Class<?>> getArgumentsType() {
-        return Collections.emptyList();
+    public Set<Integer> getPossibleArgumentsCounts() {
+        return Collections.singleton(0);
     }
 
     @Override
-    public boolean isMultipleArgument() {
+    public boolean isVarArgs() {
         return false;
     }
 }

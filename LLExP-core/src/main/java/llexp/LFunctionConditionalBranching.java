@@ -1,8 +1,8 @@
 package llexp;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 class LFunctionConditionalBranching<E> implements LFunction<E> {
     @Override
@@ -15,21 +15,13 @@ class LFunctionConditionalBranching<E> implements LFunction<E> {
         }
     }
 
-    private static List<Class<?>> ARGUMENTS_TYPES = new ArrayList<>();
-    static {
-        ARGUMENTS_TYPES.add(Boolean.class);
-        ARGUMENTS_TYPES.add(Object.class);
-        ARGUMENTS_TYPES.add(Object.class);
-        ARGUMENTS_TYPES = Collections.unmodifiableList(ARGUMENTS_TYPES);
+    @Override
+    public Set<Integer> getPossibleArgumentsCounts() {
+        return Collections.singleton(3);
     }
 
     @Override
-    public List<Class<?>> getArgumentsType() {
-        return ARGUMENTS_TYPES;
-    }
-
-    @Override
-    public boolean isMultipleArgument() {
+    public boolean isVarArgs() {
         return false;
     }
 }

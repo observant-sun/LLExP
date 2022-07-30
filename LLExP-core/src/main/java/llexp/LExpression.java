@@ -19,13 +19,14 @@ class LExpression<E> {
                 throw new IllegalArgumentException();
             }
             LFunction<E> function = (LFunction<E>) head;
-            if (function.isMultipleArgument()) {
-                if (function.getArgumentsType().size() != 1) {
+            if (function.isVarArgs()) {
+                Integer minCount = function.getPossibleArgumentsCounts().stream().findFirst().get();
+                if (minCount > tail.size()) {
                     // TODO: 30.07.2022 Message
                     throw new IllegalArgumentException();
                 }
             } else {
-                if (function.getArgumentsType().size() != tail.size()) {
+                if (!function.getPossibleArgumentsCounts().contains(tail.size())) {
                     // TODO: 30.07.2022 Message
                     throw new IllegalArgumentException();
                 }

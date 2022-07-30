@@ -1,8 +1,6 @@
 package llexp;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class LFunctionSubtraction<E> implements LFunction<E> {
     @Override
@@ -18,20 +16,21 @@ public class LFunctionSubtraction<E> implements LFunction<E> {
         }
     }
 
-    private static List<Class<?>> ARGUMENTS_TYPES = new ArrayList<>();
+    private static final Set<Integer> POSSIBLE_ARGUMENTS_COUNTS;
     static {
-        ARGUMENTS_TYPES.add(Number.class);
-        ARGUMENTS_TYPES.add(Number.class);
-        ARGUMENTS_TYPES = Collections.unmodifiableList(ARGUMENTS_TYPES);
+        Set<Integer> set = new HashSet<>();
+        set.add(1);
+        set.add(2);
+        POSSIBLE_ARGUMENTS_COUNTS = Collections.unmodifiableSet(set);
     }
 
     @Override
-    public List<Class<?>> getArgumentsType() {
-        return ARGUMENTS_TYPES;
+    public Set<Integer> getPossibleArgumentsCounts() {
+        return POSSIBLE_ARGUMENTS_COUNTS;
     }
 
     @Override
-    public boolean isMultipleArgument() {
+    public boolean isVarArgs() {
         return false;
     }
 }
