@@ -12,8 +12,8 @@ public class LFunctionDivision<E> implements LFunction<E> {
             double arg2 = ((Number) list.get(1)).doubleValue();
             return arg1 / arg2;
         } else {
-            Long arg1 = ((Long) list.get(0));
-            Long arg2 = ((Long) list.get(1));
+            long arg1 = ((Number) list.get(0)).longValue();
+            long arg2 = ((Number) list.get(0)).longValue();
             return arg1 / arg2;
         }
     }

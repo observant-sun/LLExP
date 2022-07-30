@@ -16,9 +16,9 @@ class LFunctionAddition<E> implements LFunction<E> {
             }
             return result;
         } else {
-            Long result = 0L;
+            long result = 0L;
             for (Object o : list) {
-                Long aLong = (Long) o;
+                long aLong = ((Number) o).longValue();
                 result += aLong;
             }
             return result;

@@ -15,9 +15,9 @@ public class LFunctionMultiplication<E> implements LFunction<E> {
             }
             return result;
         } else {
-            Long result = 1L;
+            long result = 1L;
             for (Object o : list) {
-                Long aLong = (Long) o;
+                long aLong = ((Number) o).longValue();
                 result *= aLong;
             }
             return result;
