@@ -1,4 +1,5 @@
 {
   "a": "getA",
-  "b": "getB"
+  "b": "getB",
+  "c": "isC"
 }

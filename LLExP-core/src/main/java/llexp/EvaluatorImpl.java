@@ -36,8 +36,7 @@ class EvaluatorImpl<E, R> implements Evaluator<E, R> {
                 return (R) Double.valueOf((String) result);
             }
         }
-        // TODO: 30.07.2022 Message, exception type
-        throw new RuntimeException();
+        throw new RuntimeException("there is no way to get " + resultClass.getName() + " from " + result.getClass());
     }
 
 }

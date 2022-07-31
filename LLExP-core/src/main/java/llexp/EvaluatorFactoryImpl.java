@@ -15,17 +15,20 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
     }
 
     @Override
-    public <R> Evaluator<E, R> createEvaluator(String exp, Class<R> resultClass) {
-        if (exp == null) {
+    public <R> Evaluator<E, R> createEvaluator(String expr, Class<R> resultClass) {
+        if (expr == null) {
             throw new NullPointerException("expression must be non-null");
         }
+        if (resultClass == null) {
+            throw new NullPointerException("result class must be non-null");
+        }
 
-        exp = exp.trim();
-        if (exp.isEmpty()) {
+        expr = expr.trim();
+        if (expr.isEmpty()) {
             throw new IllegalArgumentException("expression must be non-blank");
         }
 
-        LExpression<E> lExpression = parseString(exp);
+        LExpression<E> lExpression = parseString(expr);
 
         return new EvaluatorImpl<>(lExpression, resultClass);
     }
@@ -33,11 +36,19 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
     private LExpression<E> parseString(String str) {
         str = str.trim();
         if (str.isEmpty()) {
-            // TODO: 30.07.2022 Message, exception type
-            throw new RuntimeException();
+            throw new RuntimeException("unexpected empty string (library problem, contact developer)");
+        }
+        if (str.charAt(0) != '(') {
+            throw new IllegalArgumentException("'(' expected");
+        }
+        if (str.charAt(str.length() - 1) != ')') {
+            throw new IllegalArgumentException("No matching parentheses for " + str.split(" ", 2)[0]);
         }
         str = str.substring(1, str.length() - 1);
         String[] split = str.split(" ", 2);
+        if (split.length == 1) {
+            throw new UnsupportedOperationException("Functions with no arguments are unsupported (see \"(" + split[0] + ")\")");
+        }
         String headStr = split[0];
         String argsStr = split[1];
         List<LExpression<E>> arguments = new ArrayList<>();
@@ -48,6 +59,9 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
                 int level = 1;
                 while (level != 0) {
                     index++;
+                    if (index >= argsStr.length()) {
+                        throw new IllegalArgumentException("No matching parentheses for \"" + argsStr.split(" ", 2)[0] + "\"");
+                    }
                     if (argsStr.charAt(index) == '(') {
                         level++;
                     } else if (argsStr.charAt(index) == ')') {
@@ -83,13 +97,15 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
                 lFunction = new LFunctionEquals<>();
                 break;
             default:
-                // TODO: 30.07.2022 Message, exception type
-                throw new RuntimeException();
+                throw new UnsupportedOperationException("function \"" + headStr + "\" is undefined");
         }
         return new LExpression<>(lFunction, arguments);
     }
 
     private LExpression<E> parseArgument(String arg) {
+        if (arg.endsWith(")") || arg.endsWith("(")) {
+            throw new IllegalArgumentException("Non-matching closing parentheses");
+        }
         if (nameMethodMap.containsKey(arg)) {
             return new LExpression<>(new LFunctionMethodInvocation<>(nameMethodMap.get(arg)), Collections.emptyList());
         }

@@ -48,7 +48,8 @@ class EvaluatorFactoryImplTest {
                 Arguments.arguments("(if (= 1 1) 1 2)", 1L),
                 Arguments.arguments("(if (= (/ 5 4) 1) 1 0)", 1L),
                 Arguments.arguments("(if (= (/ 5.0 4) 1) 1 0)", 0L),
-                Arguments.arguments("(* 10 9)", 90L)
+                Arguments.arguments("(* 10 9)", 90L),
+                Arguments.arguments("(- 10)", -10L)
                 );
     }
 

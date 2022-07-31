@@ -11,13 +11,12 @@ import java.util.Scanner;
 
 public final class EvaluatorFactoryProvider {
 
-    public static <E> EvaluatorFactory<E> createFactory(Class<E> entityClass) {
+    public static <E> EvaluatorFactory<E> createFactory(Class<E> entityClass) throws MethodNotFoundException {
         String resourceName = entityClass.getSimpleName() + ".llexp.json";
         Map<String, Method> stringMethodMap = new HashMap<>();
         try (InputStream is = entityClass.getResourceAsStream(resourceName)) {
             if (is == null) {
-                // TODO: 30.07.2022 Message, exception type
-                throw new RuntimeException();
+                throw new RuntimeException("resource " + resourceName + " not found");
             }
             String text = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
             JSONObject object = new JSONObject(text);
@@ -28,13 +27,25 @@ public final class EvaluatorFactoryProvider {
                     Method method = entityClass.getMethod(o1, (Class<?>[]) null);
                     stringMethodMap.put(s, method);
                 } catch (NoSuchMethodException e) {
-                    // TODO: 30.07.2022 Message, exception type
-                    throw new RuntimeException(e);
+                    throw new MethodNotFoundException("There is no method " + e.getMessage() + " (see key \"" + s + "\")");
                 }
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return new EvaluatorFactoryImpl<>(stringMethodMap);
+    }
+
+    public static <E> EvaluatorFactory<E> createFactory(Class<E> entityClass, Map<String, String> methodMap) {
+        Map<String, Method> stringMethodMap = new HashMap<>();
+        methodMap.forEach((key, methodName) -> {
+            try {
+                Method method = entityClass.getMethod(methodName, (Class<?>[]) null);
+                stringMethodMap.put(key, method);
+            } catch (NoSuchMethodException e) {
+                throw new MethodNotFoundException("There is no method " + e.getMessage() + " (see key \"" + key + "\")");
+            }
+        });
         return new EvaluatorFactoryImpl<>(stringMethodMap);
     }
 }
