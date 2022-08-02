@@ -8,6 +8,8 @@ import java.util.Map;
 
 class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
 
+    private static final String EXPRESSION_DELIMITER_PATTERN = "\\p{javaWhitespace}";
+
     private final Map<String, Method> nameMethodMap;
 
     EvaluatorFactoryImpl(Map<String, Method> nameMethodMap) {
@@ -42,10 +44,10 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
             throw new IllegalArgumentException("'(' expected");
         }
         if (str.charAt(str.length() - 1) != ')') {
-            throw new IllegalArgumentException("No matching parentheses for " + str.split(" ", 2)[0]);
+            throw new IllegalArgumentException("No matching parentheses for " + str.split(EXPRESSION_DELIMITER_PATTERN, 2)[0]);
         }
         str = str.substring(1, str.length() - 1);
-        String[] split = str.split(" ", 2);
+        String[] split = str.split(EXPRESSION_DELIMITER_PATTERN, 2);
         if (split.length == 1) {
             throw new UnsupportedOperationException("Functions with no arguments are unsupported (see \"(" + split[0] + ")\")");
         }
@@ -60,7 +62,7 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
                 while (level != 0) {
                     index++;
                     if (index >= argsStr.length()) {
-                        throw new IllegalArgumentException("No matching parentheses for \"" + argsStr.split(" ", 2)[0] + "\"");
+                        throw new IllegalArgumentException("No matching parentheses for \"" + argsStr.split(EXPRESSION_DELIMITER_PATTERN, 2)[0] + "\"");
                     }
                     if (argsStr.charAt(index) == '(') {
                         level++;
@@ -71,7 +73,7 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
                 arguments.add(parseString(argsStr.substring(0, index + 1)));
                 argsStr = argsStr.substring(index + 1);
             } else {
-                String[] argSplit = argsStr.split(" ", 2);
+                String[] argSplit = argsStr.split(EXPRESSION_DELIMITER_PATTERN, 2);
                 arguments.add(parseArgument(argSplit[0]));
                 argsStr = argSplit.length == 2 ? argSplit[1] : "";
             }
@@ -96,6 +98,30 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
             case "=":
                 lFunction = new LFunctionEquals<>();
                 break;
+            case ">":
+                lFunction = new LFunctionGreaterThan<>();
+                break;
+            case "<":
+                lFunction = new LFunctionLessThan<>();
+                break;
+            case ">=":
+                lFunction = new LFunctionGreaterThanOrEqual<>();
+                break;
+            case "<=":
+                lFunction = new LFunctionLessThanOrEqual<>();
+                break;
+            case "and":
+                lFunction = new LFunctionLogicalAnd<>();
+                break;
+            case "or":
+                lFunction = new LFunctionLogicalOr<>();
+                break;
+            case "not":
+                lFunction = new LFunctionLogicalNot<>();
+                break;
+            case "xor":
+                lFunction = new LFunctionLogicalXor<>();
+                break;
             default:
                 throw new UnsupportedOperationException("function \"" + headStr + "\" is undefined");
         }
@@ -112,11 +138,13 @@ class EvaluatorFactoryImpl<E> implements EvaluatorFactory<E> {
 
         try {
             return new LExpression<>(Long.parseLong(arg), null);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             return new LExpression<>(Double.parseDouble(arg), null);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         return new LExpression<>(arg, null);
 
